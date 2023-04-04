@@ -26,7 +26,6 @@
     (empty ?g - gripper)
     (on-tray ?t - tray ?d - drink)
     (dirty ?t - table)
-    (clean ?t - table)
     (fast-moving ?w - waiter)
     (slow-moving ?w - waiter)
     (waiter-cleaning ?w - waiter)
@@ -372,12 +371,21 @@
         :effect (dirty ?t)
     )
     
-    (:process clean-table
+    (:event start-cleaning 
         :parameters (?t - table
-                     ?g - gripper
-                     ?w - waiter)
+        	     ?g - gripper
+        	     ?w - waiter)
         :precondition (and (empty ?g)
         		(dirty ?t)
+        		(at-rob ?w ?table)
+        		(not (cleaning ?w)))
+        :effect (cleaning ?w)
+    )
+    
+    (:process clean-table
+        :parameters (?t - table
+                     ?w - waiter)
+        :precondition (and (cleaning ?w)
         		(< (time-cleaning ?w) (* (size-table ?t) 2)))
         :effect (increase (time-cleaning ?w) 2)
                      
@@ -390,6 +398,7 @@
         	       (>= (time-cleaning ?w) (* (size-table ?t) 2))
         	      )
         :effect (and (not (dirty ?t))
+        	(not (cleaning ?w))
         	(assign (time-cleaning ?w) 0)
         	(assign (client-for-table ?t) -1)) ;identifier to invalidate event table-dirty
     )
