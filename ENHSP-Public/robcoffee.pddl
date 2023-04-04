@@ -1,5 +1,5 @@
 (define (domain robcoffee)  
-   (:requirements :time :fluents :durative-actions :strips :adl :typing :equality)
+   (:requirements :time :fluents :strips :adl :typing :equality)
    
    (:types 
     barista 
@@ -27,6 +27,8 @@
     (on-tray ?t - tray ?d - drink)
     (dirty ?t - table)
     (clean ?t - table)
+    (fast-moving ?w - waiter)
+    (slow-moving ?w - waiter)
     (waiter-cleaning ?w - waiter)
     (request ?d - drink ?c - client)
     (served ?d - drink ?c - client)
@@ -36,8 +38,10 @@
    (:functions (tray-level ?t - tray)
                (ready-time ?d - drink) ;time needed to prepare the drink
                (time-prepared ?d - drink) ;time elapsed from the preparation
-               (time-moving ?w - waiter) ;time elapsed while moving
+               (time-moving ?w - waiter) ;time elapsed while moving (interrupt idea)
                (time-cleaning ?w - waiter) ;time elapsed while cleaning
+               (goal-index ?w - waiter) ;index to reach a goal for waiter, needed for at-rob
+               (identifier-loc ?l - location) ;id for each location, needed to compare goal-index (see end motion)
                (connected ?l1 ?l2 - location)
                (size-table ?t - table)
                (time-to-drink ?c - client)
@@ -45,14 +49,15 @@
    )
    
    
-   (:action prepare-drink
-        :parameters (?d - drink 
+   (:action prepare-warm-drink
+        :parameters (?wd - warm 
         	     ?a - barista 
-                     ?b - bar)
-        :precondition (free ?a)
-        :effect (and (at-drink ?d ?b)
+        	     ?b - bar)
+        :precondition (and (free ?a)
+        	      (not (ready ?wd)))
+        :effect (and (at-drink ?wd ?b)
                      (not (free ?a))
-                     (assign (ready-time ?d) 0))
+                     (assign (ready-time ?wd) 0))
     )
                      
     (:process making-warm-drink
@@ -66,6 +71,31 @@
         :effect (increase (ready-time ?wd) (* 1 #t))
     )
     
+    (:event ready-warm-drink
+        :parameters (?wd - warm 
+        	     ?a - barista 
+        	     ?b - bar
+        	     ?w - waiter)
+        :precondition (and (>= (ready-time ?wd) 5)
+        	       (not (ready ?wd)))
+        :effect (and 
+                     (free ?a)
+                     (ready ?wd)
+                     (assign (time-prepared ?wd) 0)
+                     (assign (time-moving ?w) 0))
+    )
+    
+    (:action prepare-cold-drink
+        :parameters (?cd - cold 
+        	     ?a - barista 
+        	     ?b - bar)
+        :precondition (and (free ?a)
+        	      (not (ready ?cd)))
+        :effect (and (at-drink ?cd ?b)
+                     (not (free ?a))
+                     (assign (ready-time ?cd) 0))
+    )
+    
     (:process making-cold-drink
         :parameters (?b - bar
                      ?cd - cold
@@ -77,26 +107,18 @@
         :effect (increase (ready-time ?cd) (* 1 #t))
     )
     
-    (:action ready-drink-warm
-        :parameters (?wd - warm 
-        	     ?a - barista 
-        	     ?b - bar)
-        :precondition (= (ready-time ?wd) 5)
-        :effect (and 
-                     (free ?a)
-                     (ready ?wd)
-                     (assign (time-prepared ?wd) 0))
-    )
-    
-    (:action ready-drink-cold
+    (:event ready-cold-drink
         :parameters (?cd - cold 
         	     ?a - barista 
-        	     ?b - bar)
-        :precondition (= (ready-time ?cd) 3)
+        	     ?b - bar
+        	     ?w - waiter)
+        :precondition (and (>= (ready-time ?cd) 3)
+        	       (not (ready ?cd)))
         :effect (and 
                      (free ?a)
                      (ready ?cd)
-                     (assign (time-prepared ?cd) 0))
+                     (assign (time-prepared ?cd) 0)
+                     (assign (time-moving ?w) 0))
     )
     
     
@@ -156,28 +178,89 @@
                      (not (at-drink ?d ?b)))
     )
     
-    (:process init-fast-motion
+    (:action init-fast-motion
         :parameters (?w - waiter
                      ?g - gripper
                      ?t - tray
                      ?from ?to - location)
         :precondition (and (at-rob ?w ?from)
                         (not (hold-tray ?g ?t))
+                        (= (time-moving ?w) 0)
+                        )
+        :effect (and 
+        	 (not (at-rob ?w ?from))
+        	 (fast-moving ?w)
+        	 (assign (goal-index ?w) (identifier-loc ?to))
+        	)
+    )
+    
+    
+    
+    (:process move-fast
+        :parameters (?w - waiter
+                     ?from ?to - location)
+        :precondition (and (fast-moving ?w)
+        		(= (goal-index ?w) (identifier-loc ?to)) ;to avoid going to a location at same distance
                         (< (time-moving ?w) (/ (connected ?from ?to) 2))
                         )
         :effect (increase (time-moving ?w) (* 1 #t))
     )
     
-    (:process init-slow-motion
+    (:event stop-fast-motion
+        :parameters (?w - waiter
+                     ?from ?to - location)
+        :precondition (and (fast-moving ?w)
+        		(= (goal-index ?w) (identifier-loc ?to)) 
+                        (= (time-moving ?w) (/ (connected ?from ?to) 2)) ;timer purpose
+                        )
+        :effect (and 
+        	 (at-rob ?w ?to)
+        	 (not (fast-moving ?w))
+        	 (assign (time-moving ?w) 0)
+        	)
+    )
+    
+    
+    (:action init-slow-motion
         :parameters (?w - waiter
                      ?g - gripper
                      ?t - tray
                      ?from ?to - location)
         :precondition (and (at-rob ?w ?from)
-                        (hold-tray ?g ?t)
+                        (hold-tray ?g ?t))
+        :effect (and 
+        	 (not (at-rob ?w ?from))
+        	 (slow-moving ?w)
+        	 (assign (goal-index ?w) (identifier-loc ?to))
+        	)
+     )
+    
+    
+    (:process move-slow
+        :parameters (?w - waiter
+                     ?g - gripper
+                     ?t - tray
+                     ?from ?to - location)
+        :precondition (and (slow-moving ?w)
+        		(= (goal-index ?w) (identifier-loc ?to)) 
                         (< (time-moving ?w) (/ (connected ?from ?to) 1))
                         )
-        :effect (increase (time-moving ?w) (* 1 #t))
+        :effect (and
+        		
+        	 (increase (time-moving ?w) (* 1 #t)))
+     )
+     
+     (:event stop-slow-motion
+        :parameters (?w - waiter
+                     ?from ?to - location)
+        :precondition (and (slow-moving ?w)
+        		(= (goal-index ?w) (identifier-loc ?to)) 
+                        (= (time-moving ?w) (/ (connected ?from ?to) 1)) 
+                        )
+        :effect (and 
+        	 (at-rob ?w ?to)
+        	 (not (slow-moving ?w))
+        	 (assign (time-moving ?w) 0))
     )
     
     
@@ -199,7 +282,7 @@
                      (served ?d ?c)
                      (assign (time-to-drink ?c) 4)
                      (not (on-tray ?t ?d))
-                     (not (ready ?d)))
+                )
     )
     
     (:action give-drink-gripper
@@ -244,15 +327,6 @@
     )
     
     
-    (:action leave-table
-        :parameters (?c - client
-                     ?t - table)
-        :precondition (= (time-to-drink ?c) 0)
-        :effect (and  (decrease (client-for-table ?t) 1)
-                      (not (at-client ?c ?t)))
-    )
-    
-    
     (:action take-biscuit
         :parameters (?w - waiter
                      ?cd - cold
@@ -280,6 +354,46 @@
                       (empty ?g)
                       (not (carrying-biscuit ?g)))
     )
+    
+    (:event leave-table
+        :parameters (?c - client
+                     ?t - table)
+        :precondition (and (= (time-to-drink ?c) 0)
+        		(at-client ?c ?t))
+        :effect (and  (decrease (client-for-table ?t) 1)
+                      (not (at-client ?c ?t)))
+    )
+    
+    ;make table dirty when all clients have left
+    (:event table-dirty 
+        :parameters (?t - table)
+        :precondition (and (= (client-for-table ?t) 0)
+        		(not (dirty ?t)))
+        :effect (dirty ?t)
+    )
+    
+    (:process clean-table
+        :parameters (?t - table
+                     ?g - gripper
+                     ?w - waiter)
+        :precondition (and (empty ?g)
+        		(dirty ?t)
+        		(< (time-cleaning ?w) (* (size-table ?t) 2)))
+        :effect (increase (time-cleaning ?w) 2)
+                     
+    )
+    
+    (:event done-cleaning
+        :parameters (?t - table
+        	     ?w - waiter)
+        :precondition (and (dirty ?t)
+        	       (>= (time-cleaning ?w) (* (size-table ?t) 2))
+        	      )
+        :effect (and (not (dirty ?t))
+        	(assign (time-cleaning ?w) 0)
+        	(assign (client-for-table ?t) -1)) ;identifier to invalidate event table-dirty
+    )
+    
     
     
     

@@ -8,11 +8,14 @@
           tray1 - tray
           gripper1 - gripper
           client1 client2 - client
-          table2 table3 table4 - table)
+          table2 table3 table4- table)
 
 (:init 
     (free robtender)
     (at-rob wairob barside)
+    (= (time-moving wairob) 0)
+    (= (time-cleaning wairob) 0)
+    (= (goal-index wairob) -1)
     (at-tray tray1 barside)
     (empty gripper1)
     (= (tray-level) 0)
@@ -27,10 +30,14 @@
     (= (connected barside table4) 3)
     (= (connected table2 table3) 1)
     (= (connected table2 table4) 1)
-    (= (connected table3 table4) 1)
     (= (connected table3 table2) 1)
     (= (connected table4 table2) 1)
+    (= (connected table3 table4) 1)
     (= (connected table4 table3) 1)
+    (= (identifier-loc barside) 0)
+    (= (identifier-loc table2) 2)
+    (= (identifier-loc table3) 3)
+    (= (identifier-loc table4) 4)
     (= (size-table table2) 1)
     (= (size-table table3) 2)
     (= (size-table table4) 1)
@@ -42,12 +49,16 @@
     (dirty table4)
     )
 
-(:goal (and (served drink1 client1)
-            (served drink2 client2)
-            (biscuit-given client1)
-            (biscuit-given client2)
-            (clean table2)
-            (clean table3)
-            (clean table4))
+(:goal (and 
+	 (served drink1 client1)
+	 (served drink2 client2)
+	 (biscuit-given client1)
+	 (biscuivit-given client2)
+	 (not (dirty table2))
+	 (not (dirty table3))
+         (not (dirty table4))
+       )
+)
 
-))
+
+)
