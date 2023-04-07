@@ -58,11 +58,11 @@
 (:goal (and
 	 (served drink1 client1)
 	 (served drink2 client2)
-	 ;(biscuit-given client1)
-	 ;(biscuit-given client2)
-	 ;(not (dirty table2))
-	 ;(not (dirty table3))
-         ;(not (dirty table4))
+	 (biscuit-given client1)
+	 (biscuit-given client2)
+	 (not (dirty table2))
+	 (not (dirty table3))
+         (not (dirty table4))
        )
 )
 

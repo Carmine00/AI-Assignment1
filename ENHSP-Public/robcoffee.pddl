@@ -28,7 +28,7 @@
     (dirty ?t - table)
     (fast-moving ?w - waiter ?l - location)
     (slow-moving ?w - waiter ?l - location)
-    (waiter-cleaning ?w - waiter)
+    (waiter-cleaning ?w - waiter ?t - table)
     (request ?d - drink ?c - client)
     (served ?d - drink ?c - client)
     (biscuit-given ?c - client)
@@ -116,7 +116,7 @@
       (:process clean-table
         :parameters (?t - table
                      ?w - waiter)
-        :precondition (and (waiter-cleaning ?w)
+        :precondition (and (waiter-cleaning ?w ?t)
         		(< (time-cleaning ?w) (* (size-table ?t) 2)))
         :effect (increase (time-cleaning ?w) 2)
                      
@@ -197,17 +197,6 @@
         :effect (dirty ?t)
     )
     
-    (:event start-cleaning 
-        :parameters (?t - table
-        	     ?g - gripper
-        	     ?w - waiter)
-        :precondition (and (empty ?g)
-        		(dirty ?t)
-        		(at-rob ?w ?t)
-        		(not (waiter-cleaning ?w)))
-        :effect (waiter-cleaning ?w)
-    )
-    
     (:event done-cleaning
         :parameters (?t - table
         	     ?w - waiter)
@@ -215,7 +204,7 @@
         	       (>= (time-cleaning ?w) (* (size-table ?t) 2))
         	      )
         :effect (and (not (dirty ?t))
-        	(not (waiter-cleaning ?w))
+        	(not (waiter-cleaning ?w ?t))
         	(assign (time-cleaning ?w) 0)
         	(assign (client-for-table ?t) -1)) ;identifier to invalidate event table-dirty
     )
@@ -404,6 +393,17 @@
         :effect (and  (biscuit-given ?c)
                       (empty ?g)
                       (not (carrying-biscuit ?g)))
+    )
+    
+    (:action start-cleaning 
+        :parameters (?t - table
+        	     ?g - gripper
+        	     ?w - waiter)
+        :precondition (and (empty ?g)
+        		(dirty ?t)
+        		(at-rob ?w ?t)
+        		(not (waiter-cleaning ?w ?t)))
+        :effect (waiter-cleaning ?w ?t)
     )
     
   
