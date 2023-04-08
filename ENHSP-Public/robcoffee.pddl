@@ -39,8 +39,6 @@
                (time-prepared ?d - drink) ;time elapsed from the preparation
                (time-moving ?w - waiter) ;time elapsed while moving (interrupt idea)
                (time-cleaning ?w - waiter) ;time elapsed while cleaning
-               (goal-index ?w - waiter) ;index to reach a goal for waiter, needed for at-rob
-               (identifier-loc ?l - location) ;id for each location, needed to compare goal-index (see end motion)
                (connected ?l1 ?l2 - location)
                (size-table ?t - table)
                (time-to-drink ?c - client)
@@ -96,10 +94,10 @@
      
       (:process warm-cool-down
         :parameters (?w - warm)
-        :precondition (and 
+        :precondition (and
         		  (ready ?w)
         		  (< (time-prepared ?w) 4))
-        :effect (and (increase (time-prepared ?w) 1))
+        :effect (and (increase (time-prepared ?w) (* 1 #t)))
     )
     
     
@@ -389,7 +387,8 @@
                      ?c - client)
         :precondition (and (at-rob ?w ?t)
                            (carrying-biscuit ?g)
-                           (served ?cd ?c))
+                           (served ?cd ?c)
+                           (at-client ?c ?t))
         :effect (and  (biscuit-given ?c)
                       (empty ?g)
                       (not (carrying-biscuit ?g)))
