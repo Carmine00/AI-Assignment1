@@ -13,7 +13,7 @@
 (:init 
     (free robtender)
     (at-rob wairob barside)
-    (= (time-moving wairob) -1)
+    (= (time-moving wairob) 0)
     (= (time-cleaning wairob) -1)
     (at-tray tray1 barside)
     (empty gripper1)
