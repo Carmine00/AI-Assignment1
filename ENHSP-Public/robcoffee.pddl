@@ -7,7 +7,7 @@
     client
     warm cold - drink
     gripper
-    table bar - location
+    table bar station - location
     tray
     )
     
@@ -21,10 +21,11 @@
     (ready ?d - drink)
     (cooling ?wd - warm)
     (at-tray ?t - tray ?l - bar)
-    (hold-drink ?g - gripper ?d - drink)
-    (hold-tray ?g - gripper ?t - tray)
-    (carrying-biscuit ?g)
-    (empty ?g - gripper)
+    (hold-drink ?g - gripper ?d - drink ?w - waiter)
+    (hold-tray ?g - gripper ?t - tray ?w - waiter)
+    (belong ?g - gripper ?w - waiter)
+    (carrying-biscuit ?g - gripper ?w - waiter)
+    (empty ?g - gripper ?w - waiter)
     (on-tray ?t - tray ?d - drink)
     (dirty ?t - table)
     (fast-moving ?w - waiter ?l - location)
@@ -34,6 +35,9 @@
     (request ?d - drink ?c - client)
     (served ?d - drink ?c - client)
     (biscuit-given ?c - client)
+    (order ?w - waiter ?t - table)
+    (charging ?w - waiter)
+    (clean ?t - table)
     )
     
    (:functions (tray-level ?t - tray)
@@ -45,6 +49,8 @@
                (size-table ?t - table)
                (time-to-drink ?c - client)
                (client-for-table ?t - table)
+               (number-tasks ?w - waiter)
+               
    )
    
    ;;;;;
@@ -83,8 +89,6 @@
     
      (:process move-slow
         :parameters (?w - waiter
-                     ?g - gripper
-                     ?t - tray
                      ?from ?to - location)
         :precondition (and (slow-moving ?w ?to)
                         (< (time-moving ?w) (/ (connected ?from ?to) 1))
@@ -199,9 +203,11 @@
     
     ;make table dirty when all clients have left
     (:event table-dirty 
-        :parameters (?t - table)
+        :parameters (?t - table
+        	     ?w - waiter)
         :precondition (and (= (client-for-table ?t) 0)
-        		(not (dirty ?t)))
+        		(not (dirty ?t))
+        		(not (order ?w ?t)))
         :effect (dirty ?t)
     )
     
@@ -214,8 +220,10 @@
         	       (>= (time-cleaning ?w) (* (size-table ?t) 2))
         	      )
         :effect (and (not (dirty ?t))
+        	(clean ?t)
         	(not (waiter-cleaning ?w))
         	(not (table-cleaning ?t))
+        	(increase (number-tasks ?w) 1)
         	(assign (time-cleaning ?w) 0)
         	(assign (client-for-table ?t) -1)) ;identifier to invalidate event table-dirty
     )
@@ -257,12 +265,15 @@
         :parameters (?w - waiter
                      ?t - tray
                      ?g - gripper
-                     ?b - bar)
+                     ?b - bar
+                     ?l - table)
         :precondition (and (at-rob ?w ?b)
                            (at-tray ?t ?b)
-                           (empty ?g))
-        :effect (and (hold-tray ?g ?t)
-                     (not (empty ?g))
+                           (order ?w ?l)
+                           (not (charging ?w))
+                           (empty ?g ?w))
+        :effect (and (hold-tray ?g ?t ?w)
+                     (not (empty ?g ?w))
                      (not (at-tray ?t ?b)))
     )
     
@@ -272,10 +283,11 @@
                      ?g - gripper
                      ?b - bar)
         :precondition (and (at-rob ?w ?b)
-                           (hold-tray ?g ?t)
+                           (hold-tray ?g ?t ?w)
+                           (not (charging ?w))
                            (= (tray-level ?t) 0))
-        :effect (and (not (hold-tray ?g ?t))
-                     (empty ?g)
+        :effect (and (not (hold-tray ?g ?t ?w))
+                     (empty ?g ?w)
                      (at-tray ?t ?b))
     )
     
@@ -284,10 +296,13 @@
                      ?t - tray
                      ?g - gripper
                      ?d - drink
-                     ?b - bar)
+                     ?b - bar
+                     ?l - table)
         :precondition (and (at-rob ?w ?b)
-                           (hold-tray ?g ?t)
+                           (hold-tray ?g ?t ?w)
                            (at-drink ?d ?b)
+                           (order ?w ?l)
+                           (not (charging ?w))
                            (ready ?d)
                            (< (tray-level ?t) 3))
         :effect (and (increase (tray-level ?t) 1)
@@ -299,13 +314,16 @@
         :parameters (?w - waiter
                      ?g - gripper
                      ?d - drink
-                     ?b - bar)
+                     ?b - bar
+                     ?l - table)
         :precondition (and (at-rob ?w ?b)
-                           (empty ?g)
+                           (empty ?g ?w)
+                           (order ?w ?l)
+                           (not (charging ?w))
                            (at-drink ?d ?b)
                            (ready ?d))
-        :effect (and (hold-drink ?g ?d)
-                     (not (empty ?g))
+        :effect (and (hold-drink ?g ?d ?w)
+                     (not (empty ?g ?w))
                      (not (at-drink ?d ?b)))
     )
     
@@ -315,7 +333,9 @@
                      ?t - tray
                      ?from ?to - location)
         :precondition (and (at-rob ?w ?from)
-                        (not (hold-tray ?g ?t))
+        		(not (charging ?w))
+                        (not (hold-tray ?g ?t ?w))
+                        (belong ?g ?w)
                         (not (waiter-cleaning ?w)))
         :effect (and 
         	 (not (at-rob ?w ?from))
@@ -330,7 +350,9 @@
                      ?t - tray
                      ?from ?to - location)
         :precondition (and (at-rob ?w ?from)
-                        (hold-tray ?g ?t)
+        		(not (charging ?w))
+                        (hold-tray ?g ?t ?w)
+                        (belong ?g ?w)
                         (not (waiter-cleaning ?w))
                        )
         :effect (and 
@@ -350,13 +372,15 @@
         :precondition (and (at-rob ?w ?l)
                            (at-client ?c ?l)
                            (on-tray ?t ?d)
-                           (hold-tray ?g ?t)
+                           (not (charging ?w))
+                           (hold-tray ?g ?t ?w)
                            (request ?d ?c)
                            (<= (time-prepared ?d) 4))
         :effect (and (decrease (tray-level ?t) 1)
                      (at-drink ?d ?l)
                      (served ?d ?c)
                      (not (request ?d ?c))
+                     (increase (number-tasks ?w) 1)
                      (assign (time-to-drink ?c) 4)
                      (not (on-tray ?t ?d))
                 )
@@ -370,15 +394,17 @@
                      ?c - client)
         :precondition (and (at-rob ?w ?l)
                            (at-client ?c ?l)
-                           (hold-drink ?g ?d)
+                           (not (charging ?w))
+                           (hold-drink ?g ?d ?w)
                            (request ?d ?c)
                            (<= (time-prepared ?d) 4))
         :effect (and (at-drink ?d ?l)
                      (served ?d ?c)
                      (not (request ?d ?c))
-                     (empty ?g)
+                     (increase (number-tasks ?w) 1)
+                     (empty ?g ?w)
                      (assign (time-to-drink ?c) 4)
-                     (not (hold-drink ?g ?d)))
+                     (not (hold-drink ?g ?d ?w)))
     )
     
     
@@ -388,12 +414,16 @@
                      ?cd - cold
                      ?g - gripper
                      ?b - bar
-                     ?c - client)
+                     ?c - client
+                     ?t - table)
         :precondition (and (at-rob ?w ?b)
                            (served ?cd ?c)
-                           (empty ?g))
-        :effect (and  (carrying-biscuit ?g)
-                      (not (empty ?g)))
+                           (not (charging ?w))
+                           (order ?w ?t)
+                           (not (biscuit-given ?c))
+                           (empty ?g ?w))
+        :effect (and  (carrying-biscuit ?g ?w)
+                      (not (empty ?g ?w)))
     )
     
     
@@ -404,26 +434,41 @@
                      ?t - table
                      ?c - client)
         :precondition (and (at-rob ?w ?t)
-                           (carrying-biscuit ?g)
+                           (carrying-biscuit ?g ?w)
+                           (not (charging ?w))
                            (served ?cd ?c)
+                           (not (biscuit-given ?c))
                            (at-client ?c ?t))
         :effect (and  (biscuit-given ?c)
-                      (empty ?g)
-                      (not (carrying-biscuit ?g)))
+                      (empty ?g ?w)
+                      (not (carrying-biscuit ?g ?w)))
     )
     
     (:action start-cleaning 
         :parameters (?t - table
         	     ?g - gripper
         	     ?w - waiter)
-        :precondition (and (empty ?g)
+        :precondition (and (empty ?g ?w)
         		(dirty ?t)
+        		(not (clean ?t))
         		(at-rob ?w ?t)
+        		(= (client-for-table ?t) 0)
         		(not (table-cleaning ?t))
         		(not (waiter-cleaning ?w)))
         :effect (and (table-cleaning ?t)
         	   (waiter-cleaning ?w))
         	
+    )
+    
+    (:action be-charging
+        :parameters (?w - waiter
+        	     ?t - table
+        	     ?s - station)
+        :precondition (and 
+        	      (>= (number-tasks ?w) 2)
+        	      (not (order ?w ?t))
+        	      (at-rob ?w ?s))
+        :effect (charging ?w)
     )
     
   
