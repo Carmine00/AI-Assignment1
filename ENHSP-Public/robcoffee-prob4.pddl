@@ -90,10 +90,12 @@
     (= (time-to-drink client6) -1)
     (= (time-to-drink client7) -1)
     (= (time-to-drink client8) -1)
+    ; WARM DRINKS
     (request drink1 client1)
     (request drink2 client2)
     (request drink3 client3)
     (request drink4 client4)
+    ; COLD DRINKS
     (request drink5 client5)
     (request drink6 client6)
     (request drink7 client7)
@@ -101,7 +103,7 @@
     (dirty table2)
     (order wairob1 table1)
     (order wairob1 table3)
-    (order wairob2 table4)
+    (order wairob1 table4)
     )
 
 (:goal (and
@@ -113,10 +115,10 @@
 	 (served drink6 client6)
 	 (served drink7 client7)
 	 (served drink8 client8)
-	 ;(biscuit-given client5)
-	 ;(biscuit-given client6)
-	 ;(biscuit-given client7)
-	 ;(biscuit-given client8)
+	 (biscuit-given client5)
+	 (biscuit-given client6)
+	 (biscuit-given client7)
+	 (biscuit-given client8)
 	 (clean table1)
 	 (clean table2)
 	 (clean table3)

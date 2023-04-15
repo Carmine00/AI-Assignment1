@@ -16,9 +16,9 @@
     (free robtender)
     (at-rob wairob1 chargespot)
     (at-rob wairob2 chargespot)
-    (= (time-moving wairob1) 0)
+    (= (time-moving wairob1) -1)
     (= (time-cleaning wairob1) -1)
-    (= (time-moving wairob2) 0)
+    (= (time-moving wairob2) -1)
     (= (time-cleaning wairob2) -1)
     (at-tray tray1 barside)
     (empty gripper1 wairob1)
@@ -59,8 +59,10 @@
     (= (time-to-drink client2) -1)
     (= (time-to-drink client3) -1)
     (= (time-to-drink client4) -1)
+    ; COLD DRINKS
     (request drink1 client1)
     (request drink2 client2)
+    ; WARM DRINKS
     (request drink3 client3)
     (request drink4 client4)
     (dirty table1)
