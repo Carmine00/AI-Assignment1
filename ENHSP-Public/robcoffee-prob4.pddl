@@ -14,12 +14,12 @@
 
 (:init 
     (free robtender)
-    (at-rob wairob1 chargespot)
-    (at-rob wairob2 chargespot)
+    (at-rob wairob1 barside)
+    (at-rob wairob2 table2)
     (= (time-moving wairob1) -1)
-    (= (time-cleaning wairob1) -1)
+    (= (time-cleaning wairob1) 0)
     (= (time-moving wairob2) -1)
-    (= (time-cleaning wairob2) -1)
+    (= (time-cleaning wairob2) 0)
     (at-tray tray1 barside)
     (empty gripper1 wairob1)
     (belong gripper1 wairob1)
@@ -43,7 +43,7 @@
     (= (time-prepared drink7) -1)
     (= (time-prepared drink8) -1)
     (= (client-for-table table1) 2)
-    (= (client-for-table table2) 0)
+    (= (client-for-table table2) -1)
     (= (client-for-table table3) 4)
     (= (client-for-table table4) 2)
     ; DISTANCES MOVE FORWARD
@@ -59,9 +59,6 @@
     (= (distance table2 table4) 1)
     (= (distance table3 table4) 1)
     ; DISTANCES MOVE BACKWARD
-    (= (distance barside chargespot) 1)
-    (= (distance table1 chargespot) 1)
-    (= (distance table3 chargespot) 1)
     (= (distance table1 barside) 2)
     (= (distance table2 barside) 2)
     (= (distance table2 table1) 1)
@@ -100,9 +97,9 @@
     (request drink6 client6)
     (request drink7 client7)
     (request drink8 client8)
-    (dirty table2)
+
     (order wairob1 table1)
-    (order wairob1 table3)
+    (order wairob2 table3)
     (order wairob1 table4)
     )
 
@@ -119,10 +116,10 @@
 	 (biscuit-given client6)
 	 (biscuit-given client7)
 	 (biscuit-given client8)
+	 
 	 (clean table1)
-	 (clean table2)
 	 (clean table3)
-         (clean table4)
+     (clean table4)
        )
 )
 

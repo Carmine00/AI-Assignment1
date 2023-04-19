@@ -36,6 +36,7 @@
     (served ?d - drink ?c - client)
     (biscuit-given ?c - client)
     (order ?w - waiter ?t - table)
+    ;(order ?w - waiter ?c - client)
     (clean ?t - table)
     )
     
@@ -234,7 +235,8 @@
         :parameters (?wd - warm 
         	     ?a - barista 
         	     ?b - bar
-        	     ?c - client)
+        	     ?c - client
+        	     ?t - table)
         :precondition (and (free ?a)
         		(request ?wd ?c)
         	      (not (ready ?wd)))
@@ -248,7 +250,8 @@
         :parameters (?cd - cold 
         	     ?a - barista 
         	     ?b - bar
-        	     ?c - client)
+        	     ?c - client
+        	     ?t - table)
         :precondition (and (free ?a)
         		(request ?cd ?c)
         	      (not (ready ?cd)))
@@ -263,10 +266,11 @@
                      ?t - tray
                      ?g - gripper
                      ?b - bar
-                     ?l - table)
+                     ?l - table
+					 )
         :precondition (and (at-rob ?w ?b)
                            (at-tray ?t ?b)
-                           (order ?w ?l)
+                           (order ?w ?t)
                            (empty ?g ?w)
                            (belong ?g ?w))
         :effect (and (hold-tray ?g ?t ?w)
@@ -405,13 +409,14 @@
     
     (:action take-biscuit
         :parameters (?w - waiter
-                     ?cd - cold
+                     ?d - drink
+                     ;?wd - warm
                      ?g - gripper
                      ?b - bar
                      ?c - client
                      ?t - table)
-        :precondition (and (at-rob ?w ?b)
-                           (served ?cd ?c)
+        :precondition (and (at-rob ?w ?b)      				
+                           (served ?d ?c)
                            (order ?w ?t)
                            (not (biscuit-given ?c))
                            (empty ?g ?w)
@@ -425,10 +430,12 @@
     
     (:action give-biscuit
         :parameters (?w - waiter
+        		     ?d - drink
                      ?g - gripper
                      ?t - table
                      ?c - client)
         :precondition (and (at-rob ?w ?t)
+        				   (order ?w ?t)
                            (carrying-biscuit ?g ?w)
                            (at-client ?c ?t))
         :effect (and  (biscuit-given ?c)
