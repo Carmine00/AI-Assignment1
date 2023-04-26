@@ -10,12 +10,12 @@
           tray1 - tray
           gripper1 gripper2 - gripper
           client1 client2 client3 client4 client5 client6 client7 client8 - client
-          table1 table2 table3 table4 - table)
+          table1 table3 table4 - table)
 
 (:init 
     (free robtender)
-    (at-rob wairob1 barside)
-    (at-rob wairob2 table2)
+    (at-rob wairob1 chargespot)
+    (at-rob wairob2 chargespot)
     (= (time-moving wairob1) -1)
     (= (time-cleaning wairob1) 0)
     (= (time-moving wairob2) -1)
@@ -43,7 +43,6 @@
     (= (time-prepared drink7) -1)
     (= (time-prepared drink8) -1)
     (= (client-for-table table1) 2)
-    (= (client-for-table table2) -1)
     (= (client-for-table table3) 4)
     (= (client-for-table table4) 2)
     ; DISTANCES MOVE FORWARD
@@ -51,24 +50,15 @@
     (= (distance chargespot table1) 1)
     (= (distance chargespot table3) 1)
     (= (distance barside table1) 2)
-    (= (distance barside table2) 2)
-    (= (distance table1 table2) 1)
     (= (distance table1 table3) 1)
     (= (distance table1 table4) 1)
-    (= (distance table2 table3) 1)
-    (= (distance table2 table4) 1)
     (= (distance table3 table4) 1)
     ; DISTANCES MOVE BACKWARD
     (= (distance table1 barside) 2)
-    (= (distance table2 barside) 2)
-    (= (distance table2 table1) 1)
     (= (distance table3 table1) 1)
     (= (distance table4 table1) 1)
-    (= (distance table3 table2) 1)
-    (= (distance table4 table2) 1)
     (= (distance table4 table3) 1)
     (= (size-table table1) 1)
-    (= (size-table table2) 1)
     (= (size-table table3) 2)
     (= (size-table table4) 1)
     (at-client client1 table3)
@@ -98,9 +88,9 @@
     (request drink7 client7)
     (request drink8 client8)
 
-    (order wairob1 table1)
-    (order wairob2 table3)
-    (order wairob1 table4)
+    (order wairob2 table1)
+    (order wairob2 table4)
+    (order wairob1 table3)
     )
 
 (:goal (and
@@ -116,10 +106,9 @@
 	 (biscuit-given client6)
 	 (biscuit-given client7)
 	 (biscuit-given client8)
-	 
 	 (clean table1)
 	 (clean table3)
-     (clean table4)
+     	 (clean table4)
        )
 )
 

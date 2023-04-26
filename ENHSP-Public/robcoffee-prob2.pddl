@@ -43,9 +43,6 @@
     (= (distance barside table1) 2)
     (= (distance table1 table3) 1)
     ; DISTANCES MOVE BACKWARD
-    ;(= (distance barside chargespot) 1)
-    ;(= (distance table1 chargespot) 1)
-    ;(= (distance table3 chargespot) 1)
     (= (distance table1 barside) 2)
     (= (distance table3 table1) 1)
     
@@ -75,7 +72,6 @@
 	 (served drink2 client2)
 	 (served drink3 client3)
 	 (served drink4 client4)
-	 
 	 (biscuit-given client1)
 	 (biscuit-given client2)
 	 (clean table1)

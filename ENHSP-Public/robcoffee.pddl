@@ -430,12 +430,11 @@
     
     (:action give-biscuit
         :parameters (?w - waiter
-        		     ?d - drink
                      ?g - gripper
                      ?t - table
                      ?c - client)
         :precondition (and (at-rob ?w ?t)
-        				   (order ?w ?t)
+        		   (order ?w ?t)
                            (carrying-biscuit ?g ?w)
                            (at-client ?c ?t))
         :effect (and  (biscuit-given ?c)
