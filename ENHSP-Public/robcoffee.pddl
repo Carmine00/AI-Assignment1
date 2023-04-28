@@ -36,7 +36,6 @@
     (served ?d - drink ?c - client)
     (biscuit-given ?c - client)
     (order ?w - waiter ?t - table)
-    ;(order ?w - waiter ?c - client)
     (clean ?t - table)
     )
     
@@ -410,7 +409,6 @@
     (:action take-biscuit
         :parameters (?w - waiter
                      ?d - drink
-                     ;?wd - warm
                      ?g - gripper
                      ?b - bar
                      ?c - client

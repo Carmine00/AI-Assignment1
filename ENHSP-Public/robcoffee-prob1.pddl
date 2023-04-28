@@ -40,8 +40,6 @@
     (= (distance table2 table4) 1)
     (= (distance table3 table4) 1)
     ; DISTANCES MOVE BACKWARD
-    (= (distance barside chargespot) 1)
-    (= (distance table3 chargespot) 1)
     (= (distance table2 barside) 2)
     (= (distance table3 table2) 1)
     (= (distance table4 table2) 1)

@@ -1,0 +1,171 @@
+Domain parsed
+Problem parsed
+Grounding..
+Grounding Time: 173
+Aibr Preprocessing
+|F|:101
+|X|:16
+Aibr Preprocessing
+|A|:76
+|P|:28
+|E|:34
+Delta time heuristic model:1.0
+Delta time planning model:1.0
+Delta time search-execution model:1.0
+Delta time validation model:1
+H1 Setup Time (msec): 21
+Setting horizon to:NaN
+Running Greedy Best First Search
+h(n = s_0)=186.0
+ g(n)= 1.0 h(n)=172.0
+ g(n)= 2.0 h(n)=161.5
+ g(n)= 3.0 h(n)=153.5
+ g(n)= 4.0 h(n)=151.5
+ g(n)= 5.0 h(n)=149.5
+ g(n)= 6.0 h(n)=143.5
+ g(n)= 7.0 h(n)=135.5
+ g(n)= 8.0 h(n)=133.5
+ g(n)= 9.0 h(n)=131.5
+ g(n)= 11.0 h(n)=128.5
+ g(n)= 17.0 h(n)=125.5
+ g(n)= 22.0 h(n)=124.5
+ g(n)= 23.0 h(n)=107.0
+ g(n)= 31.0 h(n)=106.5
+ g(n)= 35.0 h(n)=106.0
+ g(n)= 36.0 h(n)=103.0
+ g(n)= 37.0 h(n)=95.0
+ g(n)= 41.0 h(n)=88.0
+ g(n)= 45.0 h(n)=87.0
+ g(n)= 46.0 h(n)=81.0
+ g(n)= 48.0 h(n)=75.5
+ g(n)= 52.0 h(n)=69.5
+ g(n)= 56.0 h(n)=69.0
+ g(n)= 56.0 h(n)=64.0
+ g(n)= 57.0 h(n)=59.0
+-------------Time: 10s ; Expanded Nodes: 80421 (Avg-Speed 8042.0 n/s); Evaluated States: 332261
+-------------Time: 20s ; Expanded Nodes: 196297 (Avg-Speed 9814.0 n/s); Evaluated States: 759629
+-------------Time: 30s ; Expanded Nodes: 309824 (Avg-Speed 10327.0 n/s); Evaluated States: 1183275
+-------------Time: 40s ; Expanded Nodes: 416934 (Avg-Speed 10423.0 n/s); Evaluated States: 1589085
+-------------Time: 50s ; Expanded Nodes: 520299 (Avg-Speed 10405.0 n/s); Evaluated States: 1969733
+-------------Time: 60s ; Expanded Nodes: 607314 (Avg-Speed 10121.0 n/s); Evaluated States: 2291466
+-------------Time: 70s ; Expanded Nodes: 710579 (Avg-Speed 10151.0 n/s); Evaluated States: 2659284
+-------------Time: 80s ; Expanded Nodes: 809873 (Avg-Speed 10123.0 n/s); Evaluated States: 3023212
+-------------Time: 90s ; Expanded Nodes: 900188 (Avg-Speed 10002.0 n/s); Evaluated States: 3384811
+-------------Time: 100s ; Expanded Nodes: 995551 (Avg-Speed 9955.0 n/s); Evaluated States: 3749285
+-------------Time: 110s ; Expanded Nodes: 1094493 (Avg-Speed 9949.0 n/s); Evaluated States: 4099882
+-------------Time: 120s ; Expanded Nodes: 1201731 (Avg-Speed 10014.0 n/s); Evaluated States: 4488380
+-------------Time: 130s ; Expanded Nodes: 1290487 (Avg-Speed 9926.0 n/s); Evaluated States: 4828981
+-------------Time: 140s ; Expanded Nodes: 1399796 (Avg-Speed 9998.0 n/s); Evaluated States: 5212507
+ g(n)= 41.0 h(n)=58.0
+ g(n)= 47.0 h(n)=55.0
+ g(n)= 48.0 h(n)=52.5
+ g(n)= 52.0 h(n)=51.5
+ g(n)= 52.0 h(n)=48.5
+ g(n)= 53.0 h(n)=45.5
+ g(n)= 58.0 h(n)=39.0
+ g(n)= 61.0 h(n)=36.0
+ g(n)= 79.0 h(n)=34.5
+ g(n)= 70.0 h(n)=27.5
+ g(n)= 73.0 h(n)=26.5
+ g(n)= 74.0 h(n)=23.5
+ g(n)= 79.0 h(n)=20.5
+-------------Time: 150s ; Expanded Nodes: 1512290 (Avg-Speed 10081.0 n/s); Evaluated States: 5645808
+-------------Time: 160s ; Expanded Nodes: 1625288 (Avg-Speed 10158.0 n/s); Evaluated States: 6063186
+-------------Time: 170s ; Expanded Nodes: 1716789 (Avg-Speed 10098.0 n/s); Evaluated States: 6417785
+-------------Time: 180s ; Expanded Nodes: 1833656 (Avg-Speed 10186.0 n/s); Evaluated States: 6870386
+ g(n)= 84.0 h(n)=9.0
+ g(n)= 85.0 h(n)=5.0
+ g(n)= 86.0 h(n)=4.0
+ g(n)= 87.0 h(n)=3.0
+ g(n)= 88.0 h(n)=2.0
+ g(n)= 89.0 h(n)=0.0
+Extracting plan with execution delta: 1.0
+Problem Solved
+
+Found Plan:
+0: (init-fast-motion wairob2 gripper2 tray1 chargespot table1)
+0: -----waiting---- [1.0]
+1.0: (prepare-cold-drink drink1 robtender barside client1 table3)
+1.0: -----waiting---- [4.0]
+4.0: (prepare-cold-drink drink2 robtender barside client2 table3)
+4.0: -----waiting---- [7.0]
+7.0: (prepare-warm-drink drink3 robtender barside client3 table1)
+7.0: -----waiting---- [11.0]
+11.0: (init-fast-motion wairob1 gripper1 tray1 chargespot barside)
+11.0: -----waiting---- [12.0]
+12.0: (take-drink-gripper wairob1 gripper1 drink3 barside table3 client3)
+12.0: (init-fast-motion wairob1 gripper1 tray1 barside table1)
+12.0: -----waiting---- [13.0]
+13.0: (init-fast-motion wairob1 gripper1 tray1 table1 table3)
+13.0: -----waiting---- [15.0]
+15.0: (give-drink-gripper wairob1 gripper1 drink3 table3 client3)
+15.0: (init-fast-motion wairob1 gripper1 tray1 table3 table1)
+15.0: -----waiting---- [16.0]
+16.0: (prepare-warm-drink drink4 robtender barside client4 table1)
+16.0: (init-fast-motion wairob1 gripper1 tray1 table1 barside)
+16.0: -----waiting---- [17.0]
+17.0: (take-biscuit wairob1 drink1 gripper1 barside client1 table3)
+17.0: (init-fast-motion wairob1 gripper1 tray1 barside table1)
+17.0: -----waiting---- [18.0]
+18.0: (init-fast-motion wairob1 gripper1 tray1 table1 table3)
+18.0: -----waiting---- [19.0]
+19.0: (give-biscuit wairob1 gripper1 table3 client1)
+19.0: (init-fast-motion wairob1 gripper1 tray1 table3 table1)
+19.0: -----waiting---- [21.0]
+21.0: (init-fast-motion wairob1 gripper1 tray1 table1 barside)
+21.0: -----waiting---- [22.0]
+22.0: (take-drink-gripper wairob1 gripper1 drink4 barside table3 client4)
+22.0: (init-fast-motion wairob1 gripper1 tray1 barside table1)
+22.0: -----waiting---- [23.0]
+23.0: (init-fast-motion wairob1 gripper1 tray1 table1 table3)
+23.0: -----waiting---- [24.0]
+24.0: (give-drink-gripper wairob1 gripper1 drink4 table3 client4)
+24.0: (init-fast-motion wairob1 gripper1 tray1 table3 table1)
+24.0: -----waiting---- [25.0]
+25.0: (init-fast-motion wairob1 gripper1 tray1 table1 barside)
+25.0: -----waiting---- [26.0]
+26.0: (take-biscuit wairob1 drink2 gripper1 barside client2 table3)
+26.0: (init-fast-motion wairob1 gripper1 tray1 barside table1)
+26.0: -----waiting---- [27.0]
+27.0: (init-fast-motion wairob1 gripper1 tray1 table1 table3)
+27.0: -----waiting---- [28.0]
+28.0: (give-biscuit wairob1 gripper1 table3 client2)
+28.0: (init-fast-motion wairob1 gripper1 tray1 table3 table1)
+28.0: -----waiting---- [29.0]
+29.0: (start-cleaning table1 gripper2 wairob2)
+29.0: (init-fast-motion wairob1 gripper1 tray1 table1 barside)
+29.0: -----waiting---- [30.0]
+30.0: (take-drink-gripper wairob1 gripper1 drink1 barside table3 client1)
+30.0: (init-fast-motion wairob1 gripper1 tray1 barside table1)
+30.0: -----waiting---- [31.0]
+31.0: (init-fast-motion wairob1 gripper1 tray1 table1 table3)
+31.0: -----waiting---- [32.0]
+32.0: (init-fast-motion wairob2 gripper2 tray1 table1 table3)
+32.0: -----waiting---- [33.0]
+33.0: (give-drink-gripper wairob1 gripper1 drink1 table3 client1)
+33.0: -----waiting---- [34.0]
+34.0: (init-fast-motion wairob1 gripper1 tray1 table3 table1)
+34.0: -----waiting---- [35.0]
+35.0: (init-fast-motion wairob1 gripper1 tray1 table1 barside)
+35.0: -----waiting---- [36.0]
+36.0: (take-drink-gripper wairob1 gripper1 drink2 barside table3 client2)
+36.0: (init-fast-motion wairob1 gripper1 tray1 barside table1)
+36.0: -----waiting---- [37.0]
+37.0: (init-fast-motion wairob1 gripper1 tray1 table1 table3)
+37.0: -----waiting---- [38.0]
+38.0: (give-drink-gripper wairob1 gripper1 drink2 table3 client2)
+38.0: -----waiting---- [42.0]
+42.0: (start-cleaning table3 gripper2 wairob2)
+42.0: -----waiting---- [46.0]
+
+Plan-Length:127
+Elapsed Time: 46.0
+Metric (Search):89.0
+Planning Time (msec): 183727
+Heuristic Time (msec): 135761
+Search Time (msec): 182719
+Expanded Nodes:1859181
+States Evaluated:6976553
+Fixed constraint violations during search (zero-crossing):0
+Number of Dead-Ends detected:4617354
+Number of Duplicates detected:2562439
