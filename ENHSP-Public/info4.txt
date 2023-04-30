@@ -1,0 +1,29 @@
+sat-hmrp
+sat-hmrphj 
+sat-hadd
+sat-aibr
+opt-hmax
+Grounding Time: 328
+f(n) = 11.5 (Expanded Nodes: 0, Evaluated States: 0, Time: 0.027) Frontier Size: 0
+f(n) = 12.5 (Expanded Nodes: 1, Evaluated States: 22, Time: 0.069) Frontier Size: 13
+f(n) = 13.5 (Expanded Nodes: 2, Evaluated States: 38, Time: 0.082) Frontier Size: 24
+f(n) = 14.0 (Expanded Nodes: 7, Evaluated States: 116, Time: 0.133) Frontier Size: 77
+f(n) = 14.5 (Expanded Nodes: 15, Evaluated States: 224, Time: 0.182) Frontier Size: 113
+f(n) = 15.0 (Expanded Nodes: 33, Evaluated States: 491, Time: 0.317) Frontier Size: 270
+f(n) = 15.5 (Expanded Nodes: 62, Evaluated States: 721, Time: 0.404) Frontier Size: 348
+f(n) = 16.0 (Expanded Nodes: 131, Evaluated States: 1476, Time: 0.584) Frontier Size: 710
+f(n) = 16.5 (Expanded Nodes: 223, Evaluated States: 2381, Time: 0.704) Frontier Size: 1007
+f(n) = 17.0 (Expanded Nodes: 452, Evaluated States: 4440, Time: 0.897) Frontier Size: 1988
+f(n) = 17.5 (Expanded Nodes: 783, Evaluated States: 7204, Time: 1.18) Frontier Size: 2713
+f(n) = 18.0 (Expanded Nodes: 1308, Evaluated States: 10915, Time: 1.55) Frontier Size: 4019
+f(n) = 18.5 (Expanded Nodes: 2134, Evaluated States: 16222, Time: 1.976) Frontier Size: 5059
+f(n) = 19.0 (Expanded Nodes: 3245, Evaluated States: 23727, Time: 2.565) Frontier Size: 7746
+f(n) = 19.5 (Expanded Nodes: 4540, Evaluated States: 31738, Time: 3.162) Frontier Size: 9168
+f(n) = 20.0 (Expanded Nodes: 6825, Evaluated States: 44809, Time: 4.192) Frontier Size: 12838
+f(n) = 20.5 (Expanded Nodes: 9534, Evaluated States: 63004, Time: 5.563) Frontier Size: 15687
+f(n) = 21.0 (Expanded Nodes: 13198, Evaluated States: 84253, Time: 7.193) Frontier Size: 21839
+f(n) = 21.5 (Expanded Nodes: 18365, Evaluated States: 114879, Time: 9.3) Frontier Size: 25438
+-------------Time: 10s ; Expanded Nodes: 19226 (Avg-Speed 1922.0 n/s); Evaluated States: 124000
+f(n) = 22.0 (Expanded Nodes: 25738, Evaluated States: 157878, Time: 12.483) Frontier Size: 35546
+opt-hrmax
+opt-blind

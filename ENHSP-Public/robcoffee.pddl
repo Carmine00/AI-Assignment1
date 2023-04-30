@@ -140,7 +140,7 @@
                      (ready ?wd)
                      (cooling ?wd)
                      (assign (time-prepared ?wd) 0)
-                     (assign (time-moving ?w) 0))
+                     )
     )
     
     (:event warm-served
@@ -162,7 +162,7 @@
         :effect (and 
                      (free ?a)
                      (ready ?cd)
-                     (assign (time-moving ?w) 0))
+                )
     )
     
     (:event stop-fast-motion
