@@ -14,40 +14,40 @@
     
     
    (:predicates 
-    (free ?b - barista)
-    (at-rob ?r - waiter ?l - location)
-    (at-client ?c - client ?l - table)
-    (at-drink ?d - drink ?l - location)
-    (ready ?d - drink)
-    (cooling ?wd - warm)
-    (at-tray ?t - tray ?l - bar)
-    (hold-drink ?g - gripper ?d - drink ?w - waiter)
-    (hold-tray ?g - gripper ?t - tray ?w - waiter)
-    (belong ?g - gripper ?w - waiter)
-    (carrying-biscuit ?g - gripper ?w - waiter)
-    (empty ?g - gripper ?w - waiter)
-    (on-tray ?t - tray ?d - drink)
-    (dirty ?t - table)
-    (fast-moving ?w - waiter ?from ?to - location)
-    (slow-moving ?w - waiter ?from ?to - location)
-    (waiter-cleaning ?w - waiter)
-    (table-cleaning ?t - table)
-    (request ?d - drink ?c - client)
-    (served ?d - drink ?c - client)
-    (biscuit-given ?c - client)
-    (order ?w - waiter ?t - table)
-    (clean ?t - table)
+    (free ?b - barista) ;barista free to prepare drinks
+    (at-rob ?r - waiter ?l - location) ;identify where waiter is
+    (at-client ?c - client ?l - table) ;identify where client is
+    (at-drink ?d - drink ?l - location) ;identify where drink is (bar or table)
+    (ready ?d - drink) ;the drink has been prepared
+    (cooling ?wd - warm) ;a warm drink has begun to cool down
+    (at-tray ?t - tray ?l - bar) ;the tray is located at the bar
+    (hold-drink ?g - gripper ?d - drink ?w - waiter) ;waiter holding drink with gripper
+    (hold-tray ?g - gripper ?t - tray ?w - waiter) ;waiter holds tray
+    (belong ?g - gripper ?w - waiter) ;identify the gripper to each single waiter
+    (carrying-biscuit ?g - gripper ?w - waiter) ;waiter is carrying a biscuit with a specific gripper
+    (empty ?g - gripper ?w - waiter) ;gripper free to carry something
+    (on-tray ?t - tray ?d - drink) ;drink has been located on the tray
+    (dirty ?t - table) ;table is dirty
+    (fast-moving ?w - waiter ?from ?to - location) ;waiter is moving fast from an initial point to a final one
+    (slow-moving ?w - waiter ?from ?to - location) ;waiter is moving slow from an initial point to a final one
+    (waiter-cleaning ?w - waiter) ;waiter is involved in the cleaning process
+    (table-cleaning ?t - table) ;a specific table is being cleaned
+    (request ?d - drink ?c - client) ;a specific drink has been requested by a client
+    (served ?d - drink ?c - client) ;a specific drink has been given to a client
+    (biscuit-given ?c - client) ;the biscuit has been given to the client
+    (order ?w - waiter ?t - table) ;a waiter has been assigned to a table
+    (clean ?t - table) ;if set to true, the table is now clean
     )
     
-   (:functions (tray-level ?t - tray)
+   (:functions (tray-level ?t - tray) ;up to maxinum 3 drinks can be on the trya
                (ready-time ?d - drink) ;time needed to prepare the drink
                (time-prepared ?d - drink) ;time elapsed from the preparation
-               (time-moving ?w - waiter) ;time elapsed while moving (interrupt idea)
+               (time-moving ?w - waiter) ;time elapsed while moving 
                (time-cleaning ?w - waiter) ;time elapsed while cleaning
-               (distance ?l1 ?l2 - location)
-               (size-table ?t - table)
-               (time-to-drink ?c - client)
-               (client-for-table ?t - table)
+               (distance ?l1 ?l2 - location) ;distance between two locations
+               (size-table ?t - table) ;dimension of each table
+               (time-to-drink ?c - client) ;time given for each client to drink
+               (client-for-table ?t - table) ;number of clients for tables, needed for drinking
                
                
    )
@@ -408,7 +408,7 @@
     
     (:action take-biscuit
         :parameters (?w - waiter
-                     ?d - drink
+                     ?d - cold
                      ?g - gripper
                      ?b - bar
                      ?c - client

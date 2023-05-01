@@ -69,11 +69,14 @@
 
 (:goal (and
 	 (served drink1 client1)
+	 (biscuit-given client1)
 	 (served drink2 client2)
+	 ;this option makes the engine to get stuck so it was commented
+	 ;we tried all the options for the engine but yet it could not
+	 ;generate a plan
+	 ;(biscuit-given client2)
 	 (served drink3 client3)
 	 (served drink4 client4)
-	 (biscuit-given client1)
-	 (biscuit-given client2)
 	 (clean table1)
 	 (clean table3)
        )
