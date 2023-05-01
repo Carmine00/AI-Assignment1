@@ -15,11 +15,13 @@ Documentation
 -------------
 The requirements of the assignment, given by prof. **Mauro Vallati**, are in the following [pdf file](https://github.com/Carmine00/AI-Assignment1/blob/main/Assignment%20I%20for%20AI4RO2.pdf). 
 
+Plans generated for each single problem [here](https://github.com/Carmine00/AI-Assignment1/blob/main/ENHSP-Public/Plan.pdf)
+
 Documentation about the project [here](https://github.com/Carmine00/AI-Assignment1/blob/main/AI_report.pdf)
 
 
 ## Authors
-Carmine Miceli
-Ecem Isildar
+Carmine Miceli <br />
+Ecem Isildar <br />
 Luca Petruzzello
 
