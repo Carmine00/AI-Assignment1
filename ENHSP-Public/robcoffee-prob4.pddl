@@ -105,6 +105,9 @@
 	 (biscuit-given client5)
 	 (biscuit-given client6)
 	 (biscuit-given client7)
+	 ;this option makes the engine to get stuck so it was commented
+	 ;we tried all the options for the engine but yet it could not
+	 ;generate a plan
 	 ;(biscuit-given client8)
 	 (clean table1)
 	 (clean table3)
