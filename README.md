@@ -8,7 +8,7 @@ Since the planning engine ENHSP is written in JAVA, it is advised to first insta
 ``` bash
 $ git clone https://gitlab.com/enricos83/ENHSP-Public/-/tree/enhsp-20?ref_type=heads
 $ sudo apt-get install openjdk-15
-$ ./run.sh
+$ ./ENHSP-Public/run.sh
 ```
 
 Documentation
